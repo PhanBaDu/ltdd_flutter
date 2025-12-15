@@ -22,38 +22,30 @@ class AppDrawer extends StatelessWidget {
       backgroundColor: Colors.white,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.only(
-          topRight: Radius.circular(30),
-          bottomRight: Radius.circular(30),
+          topRight: Radius.circular(0),
+          bottomRight: Radius.circular(0),
         ),
       ),
       child: Column(
         children: [
           // Header
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 60),
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                colors: [
-                  AppColors.primary,
-                  AppColors.white,
-                  AppColors.primary.withOpacity(0.5),
-                ],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-              ),
-              borderRadius: const BorderRadius.only(
-                bottomLeft: Radius.circular(30),
-              ),
+            padding: const EdgeInsets.only(
+              top: 50,
+              bottom: 20,
+              left: 5,
+              right: 20,
             ),
+            decoration: BoxDecoration(color: AppColors.text),
             child: Row(
               children: [
-                CircleAvatar(
-                  radius: 30,
-                  backgroundColor: Colors.white.withOpacity(0.2),
-                  child: const Icon(
-                    Iconsax.user,
-                    color: AppColors.text,
-                    size: 30,
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(15),
+                  child: Image.asset(
+                    'assets/images/flutter.png',
+                    width: 60,
+                    height: 60,
+                    fit: BoxFit.cover,
                   ),
                 ),
                 const SizedBox(width: 15),
@@ -61,27 +53,30 @@ class AppDrawer extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "Hello, User",
+                      "Hello, Phan Bá Đủ",
                       style: TextStyle(
-                        color: AppColors.text,
+                        color: AppColors.white,
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
                     Text(
-                      "Welcome back",
-                      style: TextStyle(color: AppColors.text, fontSize: 14),
+                      "Hello World!",
+                      style: TextStyle(
+                        color: AppColors.textMuted,
+                        fontSize: 14,
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
                   ],
                 ),
               ],
             ),
           ),
-
           // Menu Items
           Expanded(
             child: ListView(
-              padding: const EdgeInsets.only(top: 20),
+              padding: const EdgeInsets.only(top: 5),
               children: [
                 _buildDrawerItem(
                   icon: Iconsax.home,

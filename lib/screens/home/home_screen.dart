@@ -44,8 +44,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: Center(
                   child: Image.asset(
                     'assets/images/flutter.png',
-                    width: 200,
-                    height: 200,
+                    width: 400,
+                    height: 400,
                   ),
                 ),
               ),
