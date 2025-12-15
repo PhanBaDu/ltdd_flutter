@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import '../../widgets/app_drawer.dart';
 import '../../widgets/menu_button.dart';
 
-class Baitap1Screen extends StatelessWidget {
-  const Baitap1Screen({super.key});
+class HomeScreen extends StatelessWidget {
+  const HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: const AppDrawer(activeIndex: 1),
+      drawer: const AppDrawer(activeIndex: 0), // Home is active
       body: Builder(
         builder: (context) {
           return Stack(
@@ -20,13 +20,13 @@ class Baitap1Screen extends StatelessWidget {
                 color: Colors.white,
                 child: Center(
                   child: Text(
-                    'Nội dung Bài tập 1',
-                    style: const TextStyle(fontSize: 20),
+                    'Hello World',
+                    style: Theme.of(context).textTheme.headlineMedium,
                   ),
                 ),
               ),
-              
-              // Menu Button
+
+              // Menu Button positioned via Stack (internally uses Positioned)
               MenuButton(
                 onPressed: () {
                   Scaffold.of(context).openDrawer();

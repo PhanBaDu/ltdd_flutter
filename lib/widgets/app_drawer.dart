@@ -8,9 +8,12 @@ import 'package:ltdd_flutter/screens/baitap5/baitap5_screen.dart';
 import 'package:ltdd_flutter/screens/baitap6/baitap6_screen.dart';
 import 'package:ltdd_flutter/screens/baitap7/baitap7_screen.dart';
 import 'package:ltdd_flutter/screens/baitap8/baitap8_screen.dart';
+import 'package:ltdd_flutter/screens/home/home_screen.dart';
 
 class AppDrawer extends StatelessWidget {
-  const AppDrawer({super.key});
+  final int activeIndex;
+
+  const AppDrawer({super.key, this.activeIndex = 0});
 
   @override
   Widget build(BuildContext context) {
@@ -77,47 +80,61 @@ class AppDrawer extends StatelessWidget {
               children: [
                 _buildDrawerItem(
                   icon: Iconsax.home,
-                  title: "Home",
+                  title: "Trang chủ",
                   onTap: () {
-                    Navigator.pop(context); // Close drawer
+                    if (activeIndex != 0) {
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const HomeScreen(),
+                        ),
+                      );
+                    } else {
+                      Navigator.pop(context); // Close drawer if already on Home
+                    }
                   },
-                  isActive: true,
+                  isActive: activeIndex == 0,
                 ),
                 ...List.generate(8, (index) {
                   return _buildDrawerItem(
                     icon: Iconsax.task_square,
                     title: "Bài tập ${index + 1}",
+                    isActive: activeIndex == index + 1,
                     onTap: () {
-                      Navigator.pop(context); // Close drawer
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) {
-                            switch (index) {
-                              case 0:
-                                return const Baitap1Screen();
-                              case 1:
-                                return const Baitap2Screen();
-                              case 2:
-                                return const Baitap3Screen();
-                              case 3:
-                                return const Baitap4Screen();
-                              case 4:
-                                return const Baitap5Screen();
-                              case 5:
-                                return const Baitap6Screen();
-                              case 6:
-                                return const Baitap7Screen();
-                              case 7:
-                                return const Baitap8Screen();
-                              default:
-                                return const Scaffold(
-                                  body: Center(child: Text("Error")),
-                                );
-                            }
-                          },
-                        ),
-                      );
+                      if (activeIndex != index + 1) {
+                        Navigator.pop(context); // Close drawer
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) {
+                              switch (index) {
+                                case 0:
+                                  return const Baitap1Screen();
+                                case 1:
+                                  return const Baitap2Screen();
+                                case 2:
+                                  return const Baitap3Screen();
+                                case 3:
+                                  return const Baitap4Screen();
+                                case 4:
+                                  return const Baitap5Screen();
+                                case 5:
+                                  return const Baitap6Screen();
+                                case 6:
+                                  return const Baitap7Screen();
+                                case 7:
+                                  return const Baitap8Screen();
+                                default:
+                                  return const Scaffold(
+                                    body: Center(child: Text("Error")),
+                                  );
+                              }
+                            },
+                          ),
+                        );
+                      } else {
+                        Navigator.pop(context);
+                      }
                     },
                   );
                 }),

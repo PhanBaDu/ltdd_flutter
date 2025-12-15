@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import '../../widgets/app_drawer.dart';
+import '../../widgets/menu_button.dart';
 
 class Baitap4Screen extends StatelessWidget {
   const Baitap4Screen({super.key});
@@ -6,14 +8,33 @@ class Baitap4Screen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Bài tập 4'),
-      ),
-      body: const Center(
-        child: Text(
-          'Nội dung Bài tập 4',
-          style: TextStyle(fontSize: 20),
-        ),
+      drawer: const AppDrawer(activeIndex: 4),
+      body: Builder(
+        builder: (context) {
+          return Stack(
+            children: [
+              // Main Content
+              Container(
+                width: double.infinity,
+                height: double.infinity,
+                color: Colors.white,
+                child: Center(
+                  child: Text(
+                    'Nội dung Bài tập 4',
+                    style: const TextStyle(fontSize: 20),
+                  ),
+                ),
+              ),
+              
+              // Menu Button
+              MenuButton(
+                onPressed: () {
+                  Scaffold.of(context).openDrawer();
+                },
+              ),
+            ],
+          );
+        },
       ),
     );
   }
