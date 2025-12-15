@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:iconsax/iconsax.dart';
+import 'package:flutter/services.dart';
 import 'package:ltdd_flutter/constans/app_colors.dart';
 
 class CounterWidget extends StatefulWidget {
@@ -9,134 +9,184 @@ class CounterWidget extends StatefulWidget {
   State<CounterWidget> createState() => _CounterWidgetState();
 }
 
-class _CounterWidgetState extends State<CounterWidget> {
+class _CounterWidgetState extends State<CounterWidget>
+    with SingleTickerProviderStateMixin {
   int _count = 0;
+  AnimationController? _controller;
+  Animation<double>? _scaleAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  void _ensureAnimations() {
+    if (_controller == null) {
+      _controller = AnimationController(
+        duration: const Duration(milliseconds: 150),
+        vsync: this,
+      );
+      _scaleAnimation = Tween<double>(
+        begin: 1.0,
+        end: 1.2,
+      ).animate(CurvedAnimation(parent: _controller!, curve: Curves.easeInOut));
+    }
+  }
+
+  void _animateCount() {
+    _ensureAnimations();
+    _controller!.forward().then((_) => _controller!.reverse());
+    HapticFeedback.lightImpact(); // Rung nhẹ kiểu iOS
+  }
 
   void _increment() {
-    setState(() {
-      _count++;
-    });
+    setState(() => _count++);
+    _animateCount();
   }
 
   void _decrement() {
-    setState(() {
-      _count--;
-    });
+    setState(() => _count--);
+    _animateCount();
   }
 
   void _reset() {
-    setState(() {
-      _count = 0;
-    });
+    setState(() => _count = 0);
+    HapticFeedback.mediumImpact();
+  }
+
+  @override
+  void dispose() {
+    _controller?.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Padding(
-        padding: const EdgeInsets.all(24.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Container(
-              padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 20),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(30),
+    _ensureAnimations();
+    return Stack(
+      children: [
+        // 1. Hero Number ở giữa
+        Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                'COUNTER',
+                style: TextStyle(
+                  fontSize: 14,
+                  letterSpacing: 4,
+                  fontWeight: FontWeight.w600,
+                  color: AppColors.textMuted.withOpacity(0.5),
+                ),
               ),
-              child: Column(
-                children: [
-                  const Text(
-                    'Đếm số lượng',
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: Colors.grey,
-                      fontWeight: FontWeight.w500,
-                      letterSpacing: 1,
-                    ),
+              const SizedBox(height: 20),
+              ScaleTransition(
+                scale: _scaleAnimation!,
+                child: Text(
+                  '$_count',
+                  style: const TextStyle(
+                    fontSize: 120,
+                    fontWeight: FontWeight.w300, // Mỏng, tinh tế kiểu iOS
+                    color: AppColors.primary,
+                    height: 1,
+                    letterSpacing: -2,
+                    fontFamily: '.SF Pro Display', // Font hệ thống
                   ),
-                  const SizedBox(height: 30),
-                  Container(
-                    width: 180,
-                    height: 180,
-                    child: Center(
-                      child: Text(
-                        '$_count',
-                        style: const TextStyle(
-                          fontSize: 72,
-                          fontWeight: FontWeight.bold,
-                          color: AppColors.primary,
-                        ),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 40),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      _buildControlBtn(
-                        icon: Iconsax.minus,
-                        onTap: _decrement,
-                        color: Colors.orange,
-                        label: 'Giảm',
-                      ),
-                      const SizedBox(width: 20),
-                      _buildControlBtn(
-                        icon: Iconsax.refresh,
-                        onTap: _reset,
-                        color: Colors.grey,
-                        label: 'Đặt lại',
-                      ),
-                      const SizedBox(width: 20),
-                      _buildControlBtn(
-                        icon: Iconsax.add,
-                        onTap: _increment,
-                        color: AppColors.primary,
-                        label: 'Tăng',
-                      ),
-                    ],
-                  ),
-                ],
+                ),
               ),
+              const SizedBox(height: 100), // Dành chỗ cho control bar
+            ],
+          ),
+        ),
+
+        // 2. Floating Control Bar ở dưới
+        Positioned(
+          bottom: 40,
+          left: 40,
+          right: 40,
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(32),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.08),
+                  blurRadius: 24,
+                  offset: const Offset(0, 8),
+                ),
+              ],
             ),
-          ],
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                _buildSquareBtn(
+                  icon: Icons.remove,
+                  color: AppColors.destructive,
+                  onTap: _decrement,
+                  isDestructive: true,
+                ),
+                _buildResetBtn(),
+                _buildSquareBtn(
+                  icon: Icons.add,
+                  color: AppColors.primary,
+                  onTap: _increment,
+                  isPrimary: true,
+                ),
+              ],
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildResetBtn() {
+    return InkWell(
+      onTap: _reset,
+      borderRadius: BorderRadius.circular(20),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+        decoration: BoxDecoration(
+          color: AppColors.textMuted.withOpacity(0.1),
+          borderRadius: BorderRadius.circular(20),
+        ),
+        child: const Text(
+          "RESET",
+          style: TextStyle(
+            color: AppColors.textMuted,
+            fontWeight: FontWeight.bold,
+            fontSize: 12,
+            letterSpacing: 1,
+          ),
         ),
       ),
     );
   }
 
-  Widget _buildControlBtn({
+  Widget _buildSquareBtn({
     required IconData icon,
-    required VoidCallback onTap,
     required Color color,
-    required String label,
+    required VoidCallback onTap,
+    bool isPrimary = false,
+    bool isDestructive = false,
   }) {
-    return Column(
-      children: [
-        InkWell(
-          onTap: onTap,
-          borderRadius: BorderRadius.circular(20),
-          child: Container(
-            width: 60,
-            height: 60,
-            decoration: BoxDecoration(
-              color: color.withOpacity(0.1),
-              borderRadius: BorderRadius.circular(20),
-              border: Border.all(color: color.withOpacity(0.3), width: 1.5),
-            ),
-            child: Icon(icon, color: color, size: 28),
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(16),
+        child: Container(
+          width: 56,
+          height: 56,
+          decoration: BoxDecoration(
+            color: isPrimary ? color : Colors.transparent,
+            borderRadius: BorderRadius.circular(16),
+            border: isPrimary ? null : Border.all(color: color, width: 0.5),
           ),
+          child: Icon(icon, color: isPrimary ? Colors.white : color, size: 28),
         ),
-        const SizedBox(height: 8),
-        Text(
-          label,
-          style: TextStyle(
-            fontSize: 12,
-            fontWeight: FontWeight.w600,
-            color: Colors.grey[600],
-          ),
-        ),
-      ],
+      ),
     );
   }
 }
