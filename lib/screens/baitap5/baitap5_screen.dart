@@ -24,20 +24,6 @@ class _Baitap5ScreenState extends State<Baitap5Screen> {
     }
   }
 
-  Widget _buildSegment(String text, int index) {
-    return Container(
-      padding: const EdgeInsets.symmetric(vertical: 12),
-      child: Text(
-        text,
-        style: TextStyle(
-          fontSize: 15,
-          fontWeight: FontWeight.w600,
-          color: _selectedIndex == index ? AppColors.primary : Colors.black54,
-        ),
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -61,12 +47,40 @@ class _Baitap5ScreenState extends State<Baitap5Screen> {
                         width: double.infinity,
                         margin: const EdgeInsets.symmetric(horizontal: 20),
                         child: CupertinoSlidingSegmentedControl<int>(
-                          backgroundColor: Colors.grey[100]!,
+                          backgroundColor: CupertinoColors.systemGrey5,
                           thumbColor: Colors.white,
                           groupValue: _selectedIndex,
                           children: {
-                            0: _buildSegment('Tính BMI', 0),
-                            1: _buildSegment('Gửi Phản hồi', 1),
+                            0: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 20,
+                                vertical: 6,
+                              ),
+                              child: Text(
+                                'BMI Calculator',
+                                style: TextStyle(
+                                  color: _selectedIndex == 0
+                                      ? AppColors.primary
+                                      : AppColors.text,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                            ),
+                            1: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 20,
+                                vertical: 6,
+                              ),
+                              child: Text(
+                                'Feedback',
+                                style: TextStyle(
+                                  color: _selectedIndex == 1
+                                      ? AppColors.primary
+                                      : AppColors.text,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                            ),
                           },
                           onValueChanged: _onValueChanged,
                         ),

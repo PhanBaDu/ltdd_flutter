@@ -53,7 +53,6 @@ class _Baitap8ScreenState extends State<Baitap8Screen> {
   String? _accessToken;
   String? _refreshToken;
 
-  // Controllers with default demo credentials
   final TextEditingController _usernameController = TextEditingController(
     text: 'emilys',
   );
@@ -180,15 +179,26 @@ class _Baitap8ScreenState extends State<Baitap8Screen> {
 
     if (isLogged) {
       return Scaffold(
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.grey[50],
         drawer: const AppDrawer(activeIndex: 8),
         body: Builder(
           builder: (context) {
             return Stack(
               children: [
+                // Gradient Background
+                Container(
+                  height: size.height * 0.35,
+                  decoration: const BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                      colors: [AppColors.primary, AppColors.primary],
+                    ),
+                  ),
+                ),
                 Padding(
                   padding: EdgeInsets.only(
-                    top: MediaQuery.of(context).padding.top + 60,
+                    top: MediaQuery.of(context).padding.top + 20,
                   ),
                   child: _buildProfileView(),
                 ),
@@ -204,7 +214,7 @@ class _Baitap8ScreenState extends State<Baitap8Screen> {
       );
     }
 
-    // Login View using Baitap4 Style
+    // Login View
     return Scaffold(
       backgroundColor: Colors.grey[100],
       drawer: const AppDrawer(activeIndex: 8),
@@ -212,16 +222,18 @@ class _Baitap8ScreenState extends State<Baitap8Screen> {
         builder: (context) {
           return Stack(
             children: [
-              // 1. Background Layer: Top half Primary
+              // Background Layer
               Positioned(
                 top: 0,
                 left: 0,
                 right: 0,
-                height: size.height * 0.45,
-                child: Container(color: AppColors.primary),
+                height: size.height * 0.42,
+                child: Container(
+                  decoration: const BoxDecoration(color: AppColors.primary),
+                ),
               ),
 
-              // 2. Foreground Content
+              // Foreground Content
               SafeArea(
                 child: SingleChildScrollView(
                   child: Column(
@@ -230,7 +242,21 @@ class _Baitap8ScreenState extends State<Baitap8Screen> {
                       // Header Area
                       Column(
                         children: [
-                          const SizedBox(height: 70),
+                          const SizedBox(height: 50),
+                          // Icon/Logo
+                          Container(
+                            padding: const EdgeInsets.all(20),
+                            decoration: BoxDecoration(
+                              color: Colors.white.withOpacity(0.2),
+                              shape: BoxShape.circle,
+                            ),
+                            child: const Icon(
+                              Iconsax.lock_1,
+                              color: Colors.white,
+                              size: 40,
+                            ),
+                          ),
+                          const SizedBox(height: 24),
                           const Padding(
                             padding: EdgeInsets.symmetric(horizontal: 40),
                             child: Text(
@@ -238,20 +264,21 @@ class _Baitap8ScreenState extends State<Baitap8Screen> {
                               textAlign: TextAlign.center,
                               style: TextStyle(
                                 color: Colors.white,
-                                fontSize: 26,
+                                fontSize: 32,
                                 fontWeight: FontWeight.bold,
+                                letterSpacing: -0.5,
                               ),
                             ),
                           ),
-                          const SizedBox(height: 8),
+                          const SizedBox(height: 12),
                           Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 40),
                             child: Text(
                               "Chào mừng trở lại, chúng tôi rất nhớ bạn",
                               textAlign: TextAlign.center,
                               style: TextStyle(
-                                color: Colors.white.withOpacity(0.8),
-                                fontSize: 14,
+                                color: Colors.white.withOpacity(0.9),
+                                fontSize: 15,
                                 height: 1.5,
                               ),
                             ),
@@ -259,20 +286,27 @@ class _Baitap8ScreenState extends State<Baitap8Screen> {
                         ],
                       ),
 
-                      const SizedBox(height: 30),
+                      const SizedBox(height: 40),
 
-                      // Central CardForm
+                      // Central CardForm with Shadow
                       Container(
                         margin: const EdgeInsets.symmetric(horizontal: 24),
-                        padding: const EdgeInsets.all(24),
+                        padding: const EdgeInsets.all(28),
                         decoration: BoxDecoration(
                           color: Colors.white,
-                          borderRadius: BorderRadius.circular(24),
+                          borderRadius: BorderRadius.circular(28),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.1),
+                              blurRadius: 30,
+                              offset: const Offset(0, 10),
+                            ),
+                          ],
                         ),
                         child: _buildLoginForm(),
                       ),
 
-                      const SizedBox(height: 30),
+                      const SizedBox(height: 40),
                     ],
                   ),
                 ),
@@ -304,12 +338,12 @@ class _Baitap8ScreenState extends State<Baitap8Screen> {
             color: Color(0xFF64748B),
           ),
         ),
-        const SizedBox(height: 8),
+        const SizedBox(height: 10),
         TextField(
           controller: _usernameController,
           decoration: _inputDecoration("Nhập tên người dùng"),
         ),
-        const SizedBox(height: 16),
+        const SizedBox(height: 20),
 
         // Password
         const Text(
@@ -320,7 +354,7 @@ class _Baitap8ScreenState extends State<Baitap8Screen> {
             color: Color(0xFF64748B),
           ),
         ),
-        const SizedBox(height: 8),
+        const SizedBox(height: 10),
         TextField(
           controller: _passwordController,
           obscureText: _obscurePassword,
@@ -337,7 +371,7 @@ class _Baitap8ScreenState extends State<Baitap8Screen> {
           ),
         ),
 
-        const SizedBox(height: 16),
+        const SizedBox(height: 20),
         Row(
           children: [
             SizedBox(
@@ -353,11 +387,12 @@ class _Baitap8ScreenState extends State<Baitap8Screen> {
                 onChanged: (val) => setState(() => _rememberMe = val!),
               ),
             ),
-            const SizedBox(width: 8),
+            const SizedBox(width: 10),
             Text(
               "Ghi nhớ đăng nhập",
               style: TextStyle(
                 fontWeight: FontWeight.w500,
+                fontSize: 14,
                 color: Colors.grey[600],
               ),
             ),
@@ -368,6 +403,7 @@ class _Baitap8ScreenState extends State<Baitap8Screen> {
                 "Quên mật khẩu?",
                 style: TextStyle(
                   fontWeight: FontWeight.w600,
+                  fontSize: 14,
                   color: AppColors.primary,
                 ),
               ),
@@ -375,7 +411,7 @@ class _Baitap8ScreenState extends State<Baitap8Screen> {
           ],
         ),
 
-        const SizedBox(height: 24),
+        const SizedBox(height: 28),
         SizedBox(
           width: double.infinity,
           height: 56,
@@ -404,19 +440,19 @@ class _Baitap8ScreenState extends State<Baitap8Screen> {
                       color: Colors.white,
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
+                      letterSpacing: 0.5,
                     ),
                   ),
           ),
         ),
 
-        // Don't have account
-        const SizedBox(height: 24),
+        const SizedBox(height: 28),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
               "Chưa có tài khoản? ",
-              style: TextStyle(color: Colors.grey[600]),
+              style: TextStyle(color: Colors.grey[600], fontSize: 14),
             ),
             GestureDetector(
               onTap: () {
@@ -429,6 +465,7 @@ class _Baitap8ScreenState extends State<Baitap8Screen> {
                 "Đăng ký",
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
+                  fontSize: 14,
                   color: AppColors.primary,
                 ),
               ),
@@ -441,109 +478,154 @@ class _Baitap8ScreenState extends State<Baitap8Screen> {
 
   Widget _buildProfileView() {
     return SingleChildScrollView(
-      padding: const EdgeInsets.all(24),
+      padding: const EdgeInsets.symmetric(horizontal: 20),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const SizedBox(height: 20),
+          const SizedBox(height: 40),
 
+          // Avatar Card with Gradient Border
           Center(
             child: Column(
               children: [
                 Container(
-                  padding: const EdgeInsets.all(4),
-                  decoration: const BoxDecoration(
+                  padding: const EdgeInsets.all(6),
+                  decoration: BoxDecoration(
                     color: Colors.white,
                     shape: BoxShape.circle,
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.15),
+                        blurRadius: 30,
+                        offset: const Offset(0, 10),
+                      ),
+                    ],
                   ),
                   child: CircleAvatar(
-                    radius: 60,
+                    radius: 65,
                     backgroundImage: NetworkImage(_currentUser!.image),
                     onBackgroundImageError: (_, __) {},
                   ),
                 ),
-                const SizedBox(height: 16),
+                const SizedBox(height: 20),
                 Text(
                   _currentUser!.fullName,
                   style: const TextStyle(
-                    fontSize: 24,
+                    fontSize: 26,
                     fontWeight: FontWeight.bold,
-                    color: Colors.black,
+                    color: AppColors.text,
+                    letterSpacing: -0.5,
                   ),
                 ),
                 const SizedBox(height: 8),
-                Text(
-                  _currentUser!.email,
-                  style: TextStyle(fontSize: 14, color: Colors.grey[600]),
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 6,
+                  ),
+                  decoration: BoxDecoration(
+                    color: AppColors.text.withOpacity(0.2),
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Text(
+                    _currentUser!.email,
+                    style: const TextStyle(fontSize: 14, color: Colors.white),
+                  ),
                 ),
               ],
             ),
           ),
           const SizedBox(height: 30),
 
-          Row(
-            children: [
-              Expanded(
-                child: ElevatedButton(
-                  onPressed: _logout,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFFFFF0F3),
-                    foregroundColor: const Color(0xFFFF3B30),
-                    elevation: 0,
-                    padding: const EdgeInsets.symmetric(vertical: 16),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16),
+          // Action Buttons with improved styling
+          Container(
+            padding: const EdgeInsets.all(20),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(24),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.08),
+                  blurRadius: 20,
+                  offset: const Offset(0, 4),
+                ),
+              ],
+            ),
+            child: Row(
+              children: [
+                Expanded(
+                  child: ElevatedButton.icon(
+                    onPressed: _logout,
+                    icon: const Icon(Iconsax.logout, size: 20),
+                    label: const Text(
+                      "Đăng xuất",
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 15,
+                      ),
+                    ),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFFFFF0F3),
+                      foregroundColor: const Color(0xFFFF3B30),
+                      elevation: 0,
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16),
+                      ),
                     ),
                   ),
-                  child: const Text(
-                    "Log out",
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  ),
                 ),
-              ),
-              const SizedBox(width: 16),
-              Expanded(
-                child: OutlinedButton.icon(
-                  onPressed: _refreshTokenFunc,
-                  icon: const Icon(Iconsax.refresh, size: 20),
-                  label: const Text("Refresh Token"),
-                  style: OutlinedButton.styleFrom(
-                    foregroundColor: Colors.black,
-                    side: BorderSide(color: Colors.grey.shade300),
-                    padding: const EdgeInsets.symmetric(vertical: 16),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: ElevatedButton.icon(
+                    onPressed: _refreshTokenFunc,
+                    icon: const Icon(Iconsax.refresh, size: 20),
+                    label: const Text(
+                      "Refresh",
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 15,
+                      ),
+                    ),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.grey[100],
+                      foregroundColor: Colors.black87,
+                      elevation: 0,
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16),
+                      ),
                     ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
-          const SizedBox(height: 30),
+          const SizedBox(height: 24),
 
+          // Info Cards Grid
           _buildSingleInfoCard(
             "HỌ VÀ TÊN",
             _currentUser!.fullName,
             Iconsax.user,
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 14),
           _buildSingleInfoCard("EMAIL", _currentUser!.email, Iconsax.sms),
-          const SizedBox(height: 16),
+          const SizedBox(height: 14),
           _buildSingleInfoCard(
             "GIỚI TÍNH",
             _currentUser!.gender,
             Iconsax.profile_2user,
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 14),
           _buildSingleInfoCard(
             "TÊN ĐĂNG NHẬP",
             _currentUser!.username,
             Iconsax.tag,
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 14),
           _buildSingleInfoCard(
             "MẬT KHẨU",
-            _passwordController.text, // Show entered password for demo
+            _passwordController.text,
             Iconsax.lock,
           ),
           const SizedBox(height: 40),
@@ -555,15 +637,15 @@ class _Baitap8ScreenState extends State<Baitap8Screen> {
   Widget _buildSingleInfoCard(String title, String value, IconData icon) {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.all(22),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: Colors.grey.shade200),
+        border: Border.all(color: Colors.grey.shade100),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.02),
-            blurRadius: 10,
+            color: Colors.black.withOpacity(0.04),
+            blurRadius: 15,
             offset: const Offset(0, 4),
           ),
         ],
@@ -573,26 +655,34 @@ class _Baitap8ScreenState extends State<Baitap8Screen> {
         children: [
           Row(
             children: [
-              Icon(icon, size: 18, color: AppColors.primary),
-              const SizedBox(width: 8),
+              Container(
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: AppColors.primary.withOpacity(0.1),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Icon(icon, size: 18, color: AppColors.primary),
+              ),
+              const SizedBox(width: 12),
               Text(
                 title,
                 style: const TextStyle(
-                  fontSize: 12,
+                  fontSize: 11,
                   fontWeight: FontWeight.bold,
                   color: AppColors.primary,
-                  letterSpacing: 1,
+                  letterSpacing: 1.2,
                 ),
               ),
             ],
           ),
-          const SizedBox(height: 12),
+          const SizedBox(height: 14),
           Text(
             value,
             style: const TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.w600,
               color: Colors.black87,
+              height: 1.4,
             ),
           ),
         ],

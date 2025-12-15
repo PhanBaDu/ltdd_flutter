@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 
@@ -15,15 +16,6 @@ class _RatingWidgetState extends State<RatingWidget> {
   double _rating = 0;
   final _nameController = TextEditingController();
   final _feedbackController = TextEditingController();
-  int _selectedTagIndex = -1;
-
-  final List<String> _tags = [
-    "Service",
-    "Environment",
-    "Quality",
-    "Price",
-    "Other",
-  ];
 
   @override
   void dispose() {
@@ -34,18 +26,25 @@ class _RatingWidgetState extends State<RatingWidget> {
 
   void _sendFeedback() {
     if (_formKey.currentState!.validate() && _rating > 0) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Thank you for your valuable feedback!'),
-          backgroundColor: Colors.green,
-          behavior: SnackBarBehavior.floating,
+      // iOS Style Dialog/Alert or SnackBar
+      showCupertinoDialog(
+        context: context,
+        builder: (ctx) => CupertinoAlertDialog(
+          title: const Text("Thank You"),
+          content: const Text("We appreciate your feedback!"),
+          actions: [
+            CupertinoDialogAction(
+              child: const Text("OK"),
+              onPressed: () => Navigator.pop(ctx),
+            ),
+          ],
         ),
       );
     } else if (_rating == 0) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Please select a star rating first.'),
-          backgroundColor: Colors.red,
+          backgroundColor: CupertinoColors.destructiveRed,
           behavior: SnackBarBehavior.floating,
         ),
       );
@@ -60,154 +59,82 @@ class _RatingWidgetState extends State<RatingWidget> {
         child: Form(
           key: _formKey,
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              // Visual Header
-              const SizedBox(height: 20),
-              Container(
-                height: 120,
-                width: 120,
-                decoration: BoxDecoration(
-                  color: AppColors.primary.withOpacity(0.1),
-                  shape: BoxShape.circle,
-                ),
-                child: const Center(
-                  child: Icon(
-                    Iconsax.lovely5,
-                    size: 60,
-                    color: AppColors.primary,
-                  ),
-                ),
-              ),
-              const SizedBox(height: 24),
               const Text(
-                "Rate Your Experience",
+                "Feedback",
                 style: TextStyle(
-                  fontSize: 24,
+                  fontSize: 34,
                   fontWeight: FontWeight.bold,
-                  color: Colors.black87,
+                  letterSpacing: -1,
+                  color: Colors.black,
+                  fontFamily: '.SF Pro Display',
                 ),
               ),
               const SizedBox(height: 8),
               Text(
-                "Are you satisfied with the service?",
-                style: TextStyle(fontSize: 16, color: Colors.grey[500]),
+                "How was your experience?",
+                style: TextStyle(
+                  fontSize: 17,
+                  color: CupertinoColors.secondaryLabel,
+                ),
               ),
-              const SizedBox(height: 32),
+              const SizedBox(height: 30),
 
-              // Stars
+              // Stars (iOS minimalist)
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: List.generate(5, (index) {
                   return GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        _rating = index + 1;
-                      });
-                    },
+                    onTap: () => setState(() => _rating = index + 1),
                     child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 4),
-                      child: AnimatedScale(
-                        scale: index < _rating ? 1.2 : 1.0,
-                        duration: const Duration(milliseconds: 200),
-                        child: Icon(
-                          index < _rating ? Iconsax.star1 : Iconsax.star,
-                          color: index < _rating
-                              ? Colors.amber
-                              : Colors.grey[200],
-                          size: 36,
-                        ),
+                      padding: const EdgeInsets.symmetric(horizontal: 6),
+                      child: Icon(
+                        index < _rating ? Iconsax.star1 : Iconsax.star,
+                        color: index < _rating
+                            ? CupertinoColors.activeOrange
+                            : CupertinoColors.systemGrey4,
+                        size: 34,
                       ),
                     ),
                   );
                 }),
               ),
-              const SizedBox(height: 32),
+              const SizedBox(height: 30),
 
-              // Tags
-              Wrap(
-                spacing: 10,
-                runSpacing: 10,
-                alignment: WrapAlignment.center,
-                children: List.generate(_tags.length, (index) {
-                  final isSelected = _selectedTagIndex == index;
-                  return GestureDetector(
-                    onTap: () => setState(() => _selectedTagIndex = index),
-                    child: AnimatedContainer(
-                      duration: const Duration(milliseconds: 200),
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 8,
-                      ),
-                      decoration: BoxDecoration(
-                        color: isSelected ? AppColors.primary : Colors.white,
-                        borderRadius: BorderRadius.circular(20),
-                        border: Border.all(
-                          color: isSelected
-                              ? AppColors.primary
-                              : Colors.grey[300]!,
-                        ),
-                        boxShadow: isSelected
-                            ? [
-                                BoxShadow(
-                                  color: AppColors.primary.withOpacity(0.3),
-                                  blurRadius: 8,
-                                  offset: const Offset(0, 4),
-                                ),
-                              ]
-                            : [],
-                      ),
-                      child: Text(
-                        _tags[index],
-                        style: TextStyle(
-                          color: isSelected ? Colors.white : Colors.grey[600],
-                          fontWeight: FontWeight.w600,
-                          fontSize: 12,
-                        ),
-                      ),
-                    ),
-                  );
-                }),
-              ),
+              const SizedBox(height: 30),
 
-              const SizedBox(height: 32),
-
-              // Input Fields
-              _buildModernTextField(
+              // iOS Inputs
+              _buildIOSInput(
                 controller: _nameController,
-                hint: "Your Name",
+                placeholder: "Your Name",
                 icon: Iconsax.user,
               ),
               const SizedBox(height: 16),
-              _buildModernTextField(
+              _buildIOSInput(
                 controller: _feedbackController,
-                hint: "Tell us what can be improved...",
+                placeholder: "Your Feedback",
                 icon: Iconsax.edit,
                 maxLines: 4,
               ),
 
-              const SizedBox(height: 32),
+              const SizedBox(height: 30),
 
-              // Submit Button
               SizedBox(
                 width: double.infinity,
-                height: 56,
-                child: ElevatedButton(
+                child: CupertinoButton(
+                  color: AppColors.primary,
                   onPressed: _sendFeedback,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.black, // Sleek black button
-                    foregroundColor: Colors.white,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                    elevation: 0,
-                  ),
+                  borderRadius: BorderRadius.circular(12),
                   child: const Text(
-                    "Submit Feedback",
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                    "Send Feedback",
+                    style: TextStyle(
+                      fontWeight: FontWeight.w600,
+                      color: Colors.white,
+                    ),
                   ),
                 ),
               ),
-              const SizedBox(height: 20),
             ],
           ),
         ),
@@ -215,39 +142,46 @@ class _RatingWidgetState extends State<RatingWidget> {
     );
   }
 
-  Widget _buildModernTextField({
+  Widget _buildIOSInput({
     required TextEditingController controller,
-    required String hint,
+    required String placeholder,
     required IconData icon,
     int maxLines = 1,
   }) {
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.08),
-            blurRadius: 15,
-            offset: const Offset(0, 5),
-          ),
-        ],
-      ),
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-      child: TextFormField(
-        controller: controller,
-        maxLines: maxLines,
-        decoration: InputDecoration(
-          border: InputBorder.none,
-          hintText: hint,
-          icon: Icon(icon, color: Colors.grey[400]),
-          hintStyle: TextStyle(color: Colors.grey[400]),
+    return TextFormField(
+      controller: controller,
+      maxLines: maxLines,
+      style: const TextStyle(fontSize: 17),
+      decoration: InputDecoration(
+        hintText: placeholder,
+        hintStyle: const TextStyle(color: CupertinoColors.placeholderText),
+        filled: true,
+        fillColor: CupertinoColors.systemGrey6,
+        prefixIcon: Padding(
+          padding: EdgeInsets.only(bottom: maxLines > 1 ? 60 : 0),
+          child: Icon(icon, color: CupertinoColors.systemGrey, size: 22),
         ),
-        validator: (value) {
-          if (value == null || value.isEmpty) return 'Required';
-          return null;
-        },
+        contentPadding: const EdgeInsets.symmetric(
+          vertical: 16,
+          horizontal: 16,
+        ),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide.none,
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide.none,
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: const BorderSide(color: AppColors.primary, width: 1.5),
+        ),
       ),
+      validator: (value) {
+        if (value == null || value.isEmpty) return 'Required';
+        return null;
+      },
     );
   }
 }
