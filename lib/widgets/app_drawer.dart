@@ -124,6 +124,22 @@ class AppDrawer extends StatelessWidget {
                       icon = Iconsax.user;
                       title = "Login & Register";
                       break;
+                    case 4:
+                      icon = Iconsax.health;
+                      title = "BMI & Rating";
+                      break;
+                    case 5:
+                      icon = Iconsax.shopping_cart;
+                      title = "E-Commerce";
+                      break;
+                    case 6:
+                      icon = Iconsax.document_text;
+                      title = "Social Feed";
+                      break;
+                    case 7:
+                      icon = Iconsax.user_edit;
+                      title = "Auth & Profile";
+                      break;
                     default:
                       icon = Iconsax.task_square;
                       title = "Bài tập ${index + 1}";

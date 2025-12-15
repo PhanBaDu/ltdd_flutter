@@ -38,6 +38,8 @@ dependencies:
   flutter_colorpicker: ^1.1.0
   iconsax: ^0.0.8
   confetti: ^0.8.0
+  dio: ^5.7.0
+
 
 dev_dependencies:
   flutter_test:
