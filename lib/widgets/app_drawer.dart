@@ -36,7 +36,15 @@ class AppDrawer extends StatelessWidget {
               left: 5,
               right: 20,
             ),
-            decoration: BoxDecoration(color: AppColors.text),
+            decoration: BoxDecoration(
+              color: AppColors.white,
+              border: Border(
+                bottom: BorderSide(
+                  color: AppColors.textMuted.withOpacity(0.3),
+                  width: 0.5,
+                ),
+              ),
+            ),
             child: Row(
               children: [
                 ClipRRect(
@@ -55,8 +63,8 @@ class AppDrawer extends StatelessWidget {
                     Text(
                       "Hello, Phan Bá Đủ",
                       style: TextStyle(
-                        color: AppColors.white,
-                        fontSize: 20,
+                        color: AppColors.text,
+                        fontSize: 18,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -156,7 +164,9 @@ class AppDrawer extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
       child: Material(
-        color: isActive ? Colors.blue.withOpacity(0.1) : Colors.transparent,
+        color: isActive
+            ? AppColors.primary.withOpacity(0.1)
+            : Colors.transparent,
         borderRadius: BorderRadius.circular(15),
         child: InkWell(
           onTap: onTap,
@@ -168,8 +178,8 @@ class AppDrawer extends StatelessWidget {
                 Icon(
                   icon,
                   color: isLogout
-                      ? Colors.red
-                      : (isActive ? Colors.blue : Colors.grey),
+                      ? AppColors.destructive
+                      : (isActive ? AppColors.primary : AppColors.textMuted),
                   size: 24,
                 ),
                 const SizedBox(width: 20),
@@ -177,8 +187,8 @@ class AppDrawer extends StatelessWidget {
                   title,
                   style: TextStyle(
                     color: isLogout
-                        ? Colors.red
-                        : (isActive ? Colors.blue : Colors.black87),
+                        ? AppColors.destructive
+                        : (isActive ? AppColors.primary : AppColors.text),
                     fontSize: 16,
                     fontWeight: isActive ? FontWeight.w600 : FontWeight.w500,
                   ),
