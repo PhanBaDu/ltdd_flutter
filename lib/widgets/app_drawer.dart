@@ -52,7 +52,7 @@ class AppDrawer extends StatelessWidget {
                   backgroundColor: Colors.white.withOpacity(0.2),
                   child: const Icon(
                     Iconsax.user,
-                    color: Colors.white,
+                    color: AppColors.text,
                     size: 30,
                   ),
                 ),
@@ -63,14 +63,14 @@ class AppDrawer extends StatelessWidget {
                     Text(
                       "Hello, User",
                       style: TextStyle(
-                        color: Colors.white,
+                        color: AppColors.text,
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
                     Text(
                       "Welcome back",
-                      style: TextStyle(color: Colors.white70, fontSize: 14),
+                      style: TextStyle(color: AppColors.text, fontSize: 14),
                     ),
                   ],
                 ),
