@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:ltdd_flutter/constans/app_colors.dart';
 import 'package:ltdd_flutter/screens/baitap1/baitap1_screen.dart';
 import 'package:ltdd_flutter/screens/baitap2/baitap2_screen.dart';
 import 'package:ltdd_flutter/screens/baitap3/baitap3_screen.dart';
@@ -32,7 +33,11 @@ class AppDrawer extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 60),
             decoration: BoxDecoration(
               gradient: LinearGradient(
-                colors: [Colors.blue.shade400, Colors.blue.shade800],
+                colors: [
+                  AppColors.primary,
+                  AppColors.white,
+                  AppColors.primary.withOpacity(0.5),
+                ],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
               ),
