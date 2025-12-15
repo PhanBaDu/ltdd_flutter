@@ -105,8 +105,10 @@ class AppDrawer extends StatelessWidget {
                 ),
                 ...List.generate(8, (index) {
                   return _buildDrawerItem(
-                    icon: Iconsax.task_square,
-                    title: "Bài tập ${index + 1}",
+                    icon: index == 0 ? Iconsax.teacher : Iconsax.task_square,
+                    title: index == 0
+                        ? "Classroom"
+                        : (index == 1 ? "Wellcome" : "Bài tập ${index + 1}"),
                     isActive: activeIndex == index + 1,
                     onTap: () {
                       if (activeIndex != index + 1) {
