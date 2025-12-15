@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_colorpicker/flutter_colorpicker.dart';
+import 'package:iconsax/iconsax.dart';
+import 'package:ltdd_flutter/constans/app_colors.dart';
 
 class ColorChangerWidget extends StatelessWidget {
   final Color color;
@@ -12,27 +15,74 @@ class ColorChangerWidget extends StatelessWidget {
     required this.onChanged,
   });
 
+  void _openColorPicker(BuildContext context) {
+    Color tempColor = color;
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text(
+            'Chọn màu tùy thích',
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ),
+          content: SingleChildScrollView(
+            child: ColorPicker(
+              pickerColor: color,
+              onColorChanged: (val) => tempColor = val,
+              labelTypes: const [],
+              pickerAreaHeightPercent: 0.7,
+              enableAlpha: false,
+              displayThumbColor: true,
+              paletteType: PaletteType.hsvWithHue,
+            ),
+          ),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          actionsPadding: const EdgeInsets.symmetric(
+            horizontal: 20,
+            vertical: 16,
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: const Text('Hủy', style: TextStyle(color: Colors.grey)),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                String colorName =
+                    '#${tempColor.value.toRadixString(16).substring(2).toUpperCase()}';
+                onChanged(tempColor, colorName);
+                Navigator.of(context).pop();
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: AppColors.primary,
+                foregroundColor: Colors.white,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                elevation: 0,
+              ),
+              child: const Text('Áp dụng'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    // Xác định màu text dựa trên độ sáng của background
     bool isDark = color.computeLuminance() < 0.5;
-
-    final List<Map<String, dynamic>> colorOptions = [
-      {'label': 'Hồng', 'name': 'HỒNG', 'color': Colors.pinkAccent},
-      {'label': 'Tím', 'name': 'TÍM', 'color': Colors.deepPurpleAccent},
-      {'label': 'Vàng', 'name': 'VÀNG', 'color': Colors.yellow},
-      {'label': 'Xanh lá', 'name': 'XANH LÁ', 'color': Colors.green},
-      {'label': 'Xanh dương', 'name': 'XANH DƯƠNG', 'color': Colors.blue},
-      {'label': 'Cam', 'name': 'CAM', 'color': Colors.orangeAccent},
-      {'label': 'Đen', 'name': 'ĐEN', 'color': const Color(0xFF2D3436)},
-      {'label': 'Xanh ngọc', 'name': 'XANH NGỌC', 'color': Colors.teal},
-    ];
+    Color textColor = isDark ? Colors.white : Colors.black87;
 
     return SizedBox(
       width: double.infinity,
       height: double.infinity,
       child: Stack(
         children: [
-          // Background pattern or decoration
+          // Background decoration
           Positioned(
             top: 40,
             right: -20,
@@ -46,6 +96,7 @@ class ColorChangerWidget extends StatelessWidget {
             ),
           ),
 
+          // Main Content
           Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -53,100 +104,71 @@ class ColorChangerWidget extends StatelessWidget {
                 Text(
                   name,
                   style: TextStyle(
-                    fontSize: 48,
+                    fontSize: 40,
                     fontWeight: FontWeight.w900,
-                    color: isDark ? Colors.white : Colors.black87,
+                    color: textColor,
                     letterSpacing: 2,
+                    fontFamily: '.SF Pro Display',
                   ),
                 ),
                 const SizedBox(height: 10),
                 Text(
-                  "Màu sắc hiện tại",
+                  name,
                   style: TextStyle(
-                    fontSize: 16,
-                    color: (isDark ? Colors.white : Colors.black87).withOpacity(
-                      0.6,
-                    ),
-                    letterSpacing: 1,
+                    fontSize: 40,
+                    fontWeight: FontWeight.w900,
+                    color: textColor,
+                    letterSpacing: 2,
+                    fontFamily: '.SF Pro Display',
                   ),
                 ),
-                const SizedBox(height: 60), // Space for control panel
+                const SizedBox(height: 100),
               ],
             ),
           ),
 
-          // Control Panel at Bottom
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: Container(
-              margin: const EdgeInsets.all(24),
-              padding: const EdgeInsets.all(24),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(30),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.1),
-                    blurRadius: 30,
-                    offset: const Offset(0, 10),
+          // Floating Action Button to pick color
+          Positioned(
+            bottom: 40,
+            left: 0,
+            right: 0,
+            child: Center(
+              child: GestureDetector(
+                onTap: () => _openColorPicker(context),
+                child: Container(
+                  height: 60,
+                  padding: const EdgeInsets.symmetric(horizontal: 32),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(30),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.15),
+                        blurRadius: 20,
+                        offset: const Offset(0, 8),
+                      ),
+                    ],
                   ),
-                ],
-              ),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text(
-                    "Đổi màu hình nền",
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      color: Color(0xFF2D3436),
-                    ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const Icon(
+                        Iconsax.color_swatch,
+                        color: AppColors.primary,
+                        size: 24,
+                      ),
+                      const SizedBox(width: 12),
+                      const Text(
+                        "Chọn màu khác",
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: AppColors.primary,
+                        ),
+                      ),
+                    ],
                   ),
-                  const SizedBox(height: 20),
-                  SizedBox(
-                    height: 60,
-                    child: ListView.separated(
-                      scrollDirection: Axis.horizontal,
-                      itemCount: colorOptions.length,
-                      separatorBuilder: (context, index) =>
-                          const SizedBox(width: 16),
-                      itemBuilder: (context, index) {
-                        final option = colorOptions[index];
-                        final optionColor = option['color'] as Color;
-                        final optionName = option['name'] as String;
-                        final isSelected = name == optionName;
-
-                        return GestureDetector(
-                          onTap: () => onChanged(optionColor, optionName),
-                          child: AnimatedContainer(
-                            duration: const Duration(milliseconds: 300),
-                            width: isSelected ? 60 : 50,
-                            height: isSelected ? 60 : 50,
-                            decoration: BoxDecoration(
-                              color: optionColor,
-                              shape: BoxShape.circle,
-                              border: Border.all(
-                                color: isSelected
-                                    ? Colors.black
-                                    : Colors.transparent,
-                                width: isSelected ? 3 : 0,
-                              ),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: optionColor.withOpacity(0.4),
-                                  blurRadius: 10,
-                                  offset: const Offset(0, 4),
-                                ),
-                              ],
-                            ),
-                          ),
-                        );
-                      },
-                    ),
-                  ),
-                ],
+                ),
               ),
             ),
           ),
