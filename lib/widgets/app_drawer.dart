@@ -104,15 +104,34 @@ class AppDrawer extends StatelessWidget {
                   isActive: activeIndex == 0,
                 ),
                 ...List.generate(8, (index) {
+                  IconData icon;
+                  String title;
+
+                  switch (index) {
+                    case 0:
+                      icon = Iconsax.teacher;
+                      title = "Classroom";
+                      break;
+                    case 1:
+                      icon = Iconsax.menu_board;
+                      title = "Welcome";
+                      break;
+                    case 2:
+                      icon = Iconsax.timer_1;
+                      title = "Timer & Counter";
+                      break;
+                    case 3:
+                      icon = Iconsax.user;
+                      title = "Login & Register";
+                      break;
+                    default:
+                      icon = Iconsax.task_square;
+                      title = "Bài tập ${index + 1}";
+                  }
+
                   return _buildDrawerItem(
-                    icon: index == 0 ? Iconsax.teacher : Iconsax.task_square,
-                    title: index == 0
-                        ? "Classroom"
-                        : (index == 1
-                              ? "Wellcome"
-                              : (index == 2
-                                    ? "Timer & Counter"
-                                    : "Bài tập ${index + 1}")),
+                    icon: icon,
+                    title: title,
                     isActive: activeIndex == index + 1,
                     onTap: () {
                       if (activeIndex != index + 1) {
