@@ -512,7 +512,7 @@ class _Baitap8ScreenState extends State<Baitap8Screen> {
                   style: const TextStyle(
                     fontSize: 26,
                     fontWeight: FontWeight.bold,
-                    color: AppColors.text,
+                    color: AppColors.white,
                     letterSpacing: -0.5,
                   ),
                 ),
