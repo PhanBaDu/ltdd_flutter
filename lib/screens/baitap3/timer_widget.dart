@@ -129,7 +129,11 @@ class _TimerWidgetState extends State<TimerWidget>
                   return Stack(
                     fit: StackFit.expand,
                     children: [
-                      // Removed background CircularProgressIndicator
+                      CircularProgressIndicator(
+                        value: 1.0,
+                        strokeWidth: 10,
+                        color: Colors.grey[200],
+                      ),
                       CircularProgressIndicator(
                         value: _isTimerRunning
                             ? _animationController.value
@@ -192,29 +196,20 @@ class _TimerWidgetState extends State<TimerWidget>
   }) {
     return InkWell(
       onTap: isActive ? onTap : null,
-      borderRadius: BorderRadius.circular(8),
+      borderRadius: BorderRadius.circular(12),
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
         decoration: BoxDecoration(
-          color: isActive ? Colors.white : Colors.grey[300],
-          borderRadius: BorderRadius.circular(8),
-          boxShadow: isActive
-              ? [
-                  BoxShadow(
-                    color: AppColors.primary.withOpacity(0.3),
-                    blurRadius: 12,
-                    offset: const Offset(0, 6),
-                  ),
-                ]
-              : null,
+          color: isActive ? AppColors.primary : Colors.grey[300],
+          borderRadius: BorderRadius.circular(12),
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
               label,
-              style: TextStyle(
-                color: isActive ? AppColors.primary : Colors.grey[500],
+              style: const TextStyle(
+                color: Colors.white,
                 fontWeight: FontWeight.w600,
               ),
             ),

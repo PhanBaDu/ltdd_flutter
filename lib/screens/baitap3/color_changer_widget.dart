@@ -82,36 +82,13 @@ class ColorChangerWidget extends StatelessWidget {
       height: double.infinity,
       child: Stack(
         children: [
-          // Background decoration
-          Positioned(
-            top: 40,
-            right: -20,
-            child: Container(
-              width: 200,
-              height: 200,
-              decoration: BoxDecoration(
-                color: Colors.white.withOpacity(0.1),
-                shape: BoxShape.circle,
-              ),
-            ),
-          ),
+          // Background decoration removed
 
           // Main Content
           Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text(
-                  name,
-                  style: TextStyle(
-                    fontSize: 40,
-                    fontWeight: FontWeight.w900,
-                    color: textColor,
-                    letterSpacing: 2,
-                    fontFamily: '.SF Pro Display',
-                  ),
-                ),
-                const SizedBox(height: 10),
                 Text(
                   name,
                   style: TextStyle(
@@ -130,44 +107,25 @@ class ColorChangerWidget extends StatelessWidget {
           // Floating Action Button to pick color
           Positioned(
             bottom: 40,
-            left: 0,
-            right: 0,
-            child: Center(
-              child: GestureDetector(
-                onTap: () => _openColorPicker(context),
-                child: Container(
-                  height: 60,
-                  padding: const EdgeInsets.symmetric(horizontal: 32),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(30),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.15),
-                        blurRadius: 20,
-                        offset: const Offset(0, 8),
-                      ),
-                    ],
-                  ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      const Icon(
-                        Iconsax.color_swatch,
-                        color: AppColors.primary,
-                        size: 24,
-                      ),
-                      const SizedBox(width: 12),
-                      const Text(
-                        "Chọn màu khác",
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                          color: AppColors.primary,
-                        ),
-                      ),
-                    ],
-                  ),
+            left: 30,
+            child: GestureDetector(
+              onTap: () => _openColorPicker(context),
+              child: Container(
+                width: 50,
+                height: 50,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(15),
+                  boxShadow: [
+                    BoxShadow(
+                      color: AppColors.primary.withOpacity(0.5),
+                      blurRadius: 15,
+                      offset: const Offset(0, 5),
+                    ),
+                  ],
+                ),
+                child: Center(
+                  child: Icon(Iconsax.edit, color: color, size: 24),
                 ),
               ),
             ),
